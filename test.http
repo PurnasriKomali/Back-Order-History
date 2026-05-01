@@ -1,0 +1,129 @@
+### Back Order History API - Test Cases
+### Source: ERP_Interface_backOrderHistory_07162024
+### Matches EXACTLY the 4 sample requests from the specification document.
+### Run with: REST Client extension in VS Code (click "Send Request" above each test)
+
+
+### ============================================================
+### SPEC TEST 1: Default - Get all back orders by soldTo
+### Expected: List of entries for soldTo 203800 + pagination info
+### ============================================================
+POST http://localhost:4004/api/backorder/SearchRequest
+Content-Type: application/json
+
+{
+  "soldTo": "203800",
+  "shipTo": "123456, 234564",
+  "search": "",
+  "searchBy": "",
+  "fromDate": "",
+  "toDate": "",
+  "sort": "orderDate",
+  "dir": "desc",
+  "currentPage": 0,
+  "pageSize": 12
+}
+
+
+### ============================================================
+### SPEC TEST 2: Search by Order Number
+### Expected: Only entries matching erpOrderNumber = 7007628
+### ============================================================
+POST http://localhost:4004/api/backorder/SearchRequest
+Content-Type: application/json
+
+{
+  "soldTo": "203800",
+  "shipTo": "123456, 234564",
+  "search": "7007628",
+  "searchBy": "orderNumber",
+  "fromDate": "",
+  "toDate": "",
+  "sort": "orderDate",
+  "dir": "desc",
+  "currentPage": 0,
+  "pageSize": 12
+}
+
+
+### ============================================================
+### SPEC TEST 3: Filter by Date Range (fromDate + toDate)
+### Expected: Only entries between 2021-03-10 and 2021-12-10
+### ============================================================
+POST http://localhost:4004/api/backorder/SearchRequest
+Content-Type: application/json
+
+{
+  "soldTo": "203800",
+  "shipTo": "123456, 234564",
+  "search": "",
+  "searchBy": "",
+  "fromDate": "2021-03-10T00:00Z",
+  "toDate": "2021-12-10T23:59:59Z",
+  "sort": "orderDate",
+  "dir": "desc",
+  "currentPage": 0,
+  "pageSize": 12
+}
+
+
+### ============================================================
+### SPEC TEST 4: Filter by date AND search (orderNumber + date range)
+### Expected: entries matching orderNumber 7007602 in the given date range
+### ============================================================
+POST http://localhost:4004/api/backorder/SearchRequest
+Content-Type: application/json
+
+{
+  "soldTo": "203800",
+  "shipTo": "123456, 234564",
+  "search": "7007602",
+  "searchBy": "orderNumber",
+  "fromDate": "2020-05-01T00:00:00.001+08:00",
+  "toDate": "2022-05-01T00:00:00.001+08:00",
+  "sort": "orderDate",
+  "dir": "asc",
+  "currentPage": 0,
+  "pageSize": 12
+}
+
+
+### ============================================================
+### EXTRA TEST 5: No Results - Unknown soldTo
+### Expected Response: null (as per spec)
+### ============================================================
+POST http://localhost:4004/api/backorder/SearchRequest
+Content-Type: application/json
+
+{
+  "soldTo": "000000",
+  "shipTo": "123456",
+  "search": "",
+  "searchBy": "",
+  "fromDate": "",
+  "toDate": "",
+  "sort": "orderDate",
+  "dir": "desc",
+  "currentPage": 0,
+  "pageSize": 12
+}
+
+
+### ============================================================
+### EXTRA TEST 6: Missing soldTo - Validation Error Test
+### Expected Response: 400 error - "soldTo is a mandatory field"
+### ============================================================
+POST http://localhost:4004/api/backorder/SearchRequest
+Content-Type: application/json
+
+{
+  "shipTo": "123456",
+  "search": "",
+  "searchBy": "",
+  "fromDate": "",
+  "toDate": "",
+  "sort": "orderDate",
+  "dir": "desc",
+  "currentPage": 0,
+  "pageSize": 12
+}

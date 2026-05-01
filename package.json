@@ -1,0 +1,27 @@
+{
+  "name": "back-order-history",
+  "version": "1.0.0",
+  "description": "ERP Interface - Back Order History Items (Hybris to Azure/CRM/ERP)",
+  "repository": "<Add your repo URL here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap/cds": "^8",
+    "@sap/cds-hana": "^2",
+    "express": "^4"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^1",
+    "@sap/cds-dk": "^8"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch": "cds watch"
+  },
+  "cds": {
+    "requires": {
+      "db": "sql",
+      "auth": "dummy"
+    }
+  }
+}

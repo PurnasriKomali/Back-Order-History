@@ -1,0 +1,20 @@
+{
+  "xsappname": "BackOrderHistory",
+  "tenant-mode": "dedicated",
+  "description": "Security config for Back Order History API",
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.read",
+      "description": "Read back order history"
+    }
+  ],
+  "role-templates": [
+    {
+      "name": "BackOrderViewer",
+      "description": "Can read back order history",
+      "scope-references": [
+        "$XSAPPNAME.read"
+      ]
+    }
+  ]
+}

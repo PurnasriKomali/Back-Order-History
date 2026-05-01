@@ -1,0 +1,56 @@
+_schema-version: "3.1"
+ID: BackOrderHistory
+description: ERP Interface - Back Order History Items (Hybris to Azure/CRM/ERP)
+version: 1.0.0
+
+modules:
+  # ─── Backend (CAP Node.js Service) ────────────────────────────────────────
+  - name: BackOrderHistory-srv
+    type: nodejs
+    path: .
+    requires:
+      - name: BackOrderHistory-db
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    parameters:
+      buildpacks:
+        - nodejs_buildpack
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npx cds build --production
+        - cp -r app gen/srv/app
+      build-result: gen/srv
+
+
+  # ─── Database Deployer (HANA HDI) ─────────────────────────────────────────
+  - name: BackOrderHistory-db-deployer
+    type: hdb
+    path: gen/db
+    requires:
+      - name: BackOrderHistory-db
+    parameters:
+      buildpacks:
+        - nodejs_buildpack
+
+resources:
+  # ─── SAP HANA Cloud Database ───────────────────────────────────────────────
+  - name: BackOrderHistory-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+
+  # ─── XSUAA Authentication ─────────────────────────────────────────────────
+  - name: BackOrderHistory-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: BackOrderHistory-${org}-${space}
+        tenant-mode: dedicated
