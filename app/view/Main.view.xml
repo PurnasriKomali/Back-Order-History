@@ -7,7 +7,7 @@
     xmlns:layout="sap.ui.layout"
     xmlns:fb="sap.ui.comp.filterbar"
     xmlns:core="sap.ui.core">
-    <f:DynamicPage id="dynamicPageId" headerExpanded="true">
+    <f:DynamicPage id="dynamicPageId" headerExpanded="true" showFooter="true">
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
@@ -97,13 +97,7 @@
                         <cells>
                             <ObjectIdentifier title="{productCode}" text="{itemNumber}"/>
                             <Text text="{erpOrderNumber}" />
-                            <Text text="{
-                                path: 'orderDate',
-                                type: 'sap.ui.model.type.DateTime',
-                                formatOptions: {
-                                    style: 'medium'
-                                }
-                            }" />
+                            <Text text="{orderDate}" />
                             <Text text="{quantity}" />
                             <ObjectNumber number="{dealerPrice}" unit="{currency}" />
                             <ObjectNumber number="{totalPrice}" unit="{currency}" state="Information"/>

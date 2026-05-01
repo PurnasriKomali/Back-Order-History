@@ -9,7 +9,7 @@ sap.ui.define([
     return Controller.extend("ns.backorder.controller.Main", {
         onInit: function () {
             this._iCurrentPage = 1;
-            this._iPageSize = 12;
+            this._iPageSize = 5;
         },
 
         onAfterRendering: function() {
@@ -73,6 +73,7 @@ sap.ui.define([
             // Apply filters
             this._iCurrentPage = 1;
             this._updatePaginationUI();
+            oBinding.changeParameters({ $top: this._iPageSize, $skip: 0 });
             oBinding.filter(aFilters);
         },
 
@@ -82,7 +83,10 @@ sap.ui.define([
             this._iCurrentPage = bNext ? this._iCurrentPage + 1 : Math.max(1, this._iCurrentPage - 1);
 
             var oBinding = this.getView().byId("idBackOrderTable").getBinding("items");
-            oBinding.changeParameters({ $skip: (this._iCurrentPage - 1) * this._iPageSize });
+            oBinding.changeParameters({ 
+                $top: this._iPageSize,
+                $skip: (this._iCurrentPage - 1) * this._iPageSize 
+            });
             this._updatePaginationUI();
         },
 
