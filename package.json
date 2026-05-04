@@ -25,7 +25,7 @@
       "db": "sql",
       "[production]": {
         "db": "hana",
-        "auth": "dummy"
+        "auth": "xsuaa"
       }
     }
   }
