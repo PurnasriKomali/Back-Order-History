@@ -4,12 +4,35 @@ description: ERP Interface - Back Order History Items (Hybris to Azure/CRM/ERP)
 version: 1.0.0
 
 modules:
+  # ─── AppRouter (UI + Security Gateway) ────────────────────────────────────
+  - name: BackOrderHistory-app
+    type: approuter.nodejs
+    path: approuter
+    requires:
+      - name: BackOrderHistory-auth
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api
+          url: ~{srv-url}
+          forwardAuthToken: true
+    parameters:
+      disk-quota: 256M
+      memory: 128M
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - mkdir -p resources
+        - cp -r ../app/. resources/
+
   # ─── Backend (CAP Node.js Service) ────────────────────────────────────────
   - name: BackOrderHistory-srv
     type: nodejs
     path: .
     requires:
       - name: BackOrderHistory-db
+      - name: BackOrderHistory-auth
     provides:
       - name: srv-api
         properties:
